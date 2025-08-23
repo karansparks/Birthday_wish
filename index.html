@@ -13,14 +13,15 @@
 
 body {
     margin: 0;
+      padding: 0;
+  height: 100% !important;
     font-family: "Montserrat", sans-serif;
     background-color: #071945;
     /* background-color: orange; */
-
+    overflow: hidden;
     color: #eef8ce;
     font-family: 'Poppins', sans-serif;
     font-size: 14px;
-    height: 100vh;
     background-image:
     url(img/bg.png),
     repeating-linear-gradient(
@@ -32,17 +33,35 @@ body {
     width: 0;
 }
 
+
+/* Popup animation */
+.popup-text {
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+        position:fixed;
+      bottom:270px;
+      font-weight: bold;
+      right: 69px;
+      width: 90px;
+      z-index:99 !important
+}
+
+@keyframes popup {
+  0%  { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
 * {
     padding: 0;
     margin: 0;
     list-style: none;
+  pointer-events: auto;
     box-sizing: border-box;
 }
 
 
 .section {
     width: 100%;
-    min-height: 100vh;
     position: relative;
     display: flex;
     justify-content: center;
@@ -52,7 +71,6 @@ body {
 .content-fit {
     width: min(1200px, 90vw);
     margin: auto;
-    min-height: 100vh;
     position: relative;
     padding-block: 10em;
 }
@@ -261,6 +279,10 @@ header .content-fit nav ul{
   --smaller: .75;
 }
 
+.typing{
+    display: none;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -338,6 +360,10 @@ li span {
     right: -30px;   
     width: 220px;
     z-index:99 !important;
+     animation: popup 1.5s infinite;
+}
+.think.no-animation {
+  animation: none; /* remove animation when toggled */
 }
 
    .typewriter {
@@ -368,8 +394,9 @@ li span {
     </style>
     
 </head>
-<body>
-  <img src="./star.png" alt="" class="star"> 
+<body onclick="toggleText()">
+    <div >
+<img src="./star.png" alt="" class="star"> 
   <img src="./star.png" alt="" class="star1"> 
   <img src="./star.png" alt="" class="star2"> 
 
@@ -407,26 +434,41 @@ li span {
 <!-- <img src="./gifts.png" alt="" class="gifts"> -->
 <img src="./comment.png" alt="" class="think">
 
-<audio id="bg-music" autoplay loop>
+<!-- <audio id="bg-music" autoplay loop>
   <source src="./bgm.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
-</audio>
+</audio> -->
+ <div class="popup-text" onclick="toggleText()">Bow-wow! Click Me!💕</div>
+
  <div class="typing"></div>
-<div id="container3D"></div>
+<div id="container3D" ></div>
 <!-- <script src="/main.js"></script>
 <script type="module" src="/app.js"></script> -->
+    </div>
+  
 
-
-
- 
 
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+<script>
+  function toggleText() {
+  const popup = document.querySelector(".popup-text");
+  const typing = document.querySelector(".typing");
+  const comment = document.querySelector(".think");
+  const model = document.querySelector("#container3D");
 
+  if (popup.style.display !== "none" ) {
+    popup.style.display = "none";   
+    typing.style.display = "inline-block";
+    comment.classList.add("no-animation"); 
+
+  } 
+ 
+}
+</script>
   <script>
     gsap.registerPlugin(TextPlugin);
-
     const messages = [
       "Hi Sweety ❤️",
       "Can’t Wait to See Your Smile on Your Day 🌸"
@@ -463,6 +505,20 @@ li span {
 
   <script>
   document.body.addEventListener("click", function () {
+      const popup = document.querySelector(".popup-text");
+  const typing = document.querySelector(".typing");
+  const comment = document.querySelector(".think");
+
+  if (popup.style.display !== "none" ) {
+    popup.style.display = "none";   
+    typing.style.display = "inline-block";
+    comment.classList.add("no-animation"); 
+
+  } else {
+    typing.style.display = "none";
+    popup.style.display = "block";
+    comment.classList.add("no-animation"); 
+  } 
     const music = document.getElementById("bg-music");
     music.muted = false;
     music.play();
