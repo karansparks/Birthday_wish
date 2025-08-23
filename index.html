@@ -407,7 +407,10 @@ li span {
 <!-- <img src="./gifts.png" alt="" class="gifts"> -->
 <img src="./comment.png" alt="" class="think">
 
-
+<audio autoplay loop>
+  <source src="./bgm.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
  <div class="typing"></div>
 <div id="container3D"></div>
 <!-- <script src="/main.js"></script>
@@ -765,8 +768,8 @@ window.addEventListener('resize', () => {
 
   // ================= SCENE =================
   const scene = new THREE.Scene();
-  let bee, garden, butterfly;
-  let mixer, mixers, mixers1, mixers2,butterflyanimation;
+  let bee, garden, butterfly,honeybee;
+  let mixer, mixers, mixers1, mixers2,butterflyanimation,honeybeeanimation1;
 
   // ================= LOADERS =================
   const loader = new GLTFLoader();
@@ -847,12 +850,35 @@ document.addEventListener("click", () => {
       modelMove();
   });
 
+
+   // ---- Butterfly ----
+ loader.load('./honeybee.glb', function (gltf) {
+      honeybee = gltf.scene;
+      honeybee.scale.set(0.003, 0.003, 0.003);
+      honeybee.position.set(-0.7, -1.5, 0);
+      honeybee.rotation.y = 10  ;   // 90°   
+
+// Rotate around X axis (up / down)
+honeybee.rotation.x = -1;
+honeybee.rotation.y = 1;   // 90°
+   // 90°
+
+// Rotate around Z axis (tilt)
+honeybee.rotation.z = Math.PI / 4; 
+      scene.add(honeybee);
+      honeybeeanimation1 = new THREE.AnimationMixer(honeybee);
+      honeybeeanimation1.clipAction(gltf.animations[0]).play();
+      modelMove();
+            // Rotate around Y axis (left / right)
+
+  });
+
     // ---- Butterfly ----
   loader.load('./butterfly.glb', function (gltf) {
       butterfly = gltf.scene;
       butterfly.scale.set(0.09, 0.09, 0.09);
-      butterfly.position.set(0.9, 0.3, 0);
-butterfly.rotation.y = 10  ;   // 90°
+      butterfly.position.set(0.6, 0.3, 0);
+butterfly.rotation.y = 10  ;   // 90°   
 
 // Rotate around X axis (up / down)
 butterfly.rotation.x = 20;   // 90°
@@ -907,6 +933,9 @@ butterfly.rotation.z = Math.PI / 4;
       if (mixers1) mixers1.update(0.01);
       if (mixers2) mixers2.update(0.01);
       if (butterflyanimation) butterflyanimation.update(0.01);
+      if (honeybeeanimation1) honeybeeanimation1.update(0.01);
+
+      
 
   };
   reRender3D();
