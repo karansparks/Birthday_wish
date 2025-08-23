@@ -468,6 +468,25 @@ li span {
     music.play();
   }, { once: true });
 </script>
+<script>
+  window.addEventListener("load", () => {
+    const music = document.getElementById("bg-music");
+    let volume = 0;
+    music.muted = false; // unmute
+    music.volume = 0;    // start silent
+    music.play();
+
+    // Smooth fade-in
+    const fade = setInterval(() => {
+      if (volume < 1) {
+        volume += 0.05;
+        music.volume = volume;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200); // increase volume every 200ms
+  });
+</script>
   <script>
     (function () {
   const second = 1000,
