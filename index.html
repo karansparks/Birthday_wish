@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">
+    
+</head>
+<body>
+  <img src="./star.png" alt="" class="star"> 
+  <img src="./star.png" alt="" class="star1"> 
+  <img src="./star.png" alt="" class="star2"> 
+
+  <img src="/crescent-moon-stars-glossy-yellow-white-glossy-clouds-d-style-isolated-realistic-half-moon-moon.png" alt="" class="moon">
+  <img src="./cloud.png" alt="" class="cloud1">
+  <img src="./cloud.png" alt="" class="cloud2">
+
+<div class="container" >
+  <h1 id="headline">The Queen’s Day is Almost Here…</h1>
+  <div id="countdown">
+    <ul>
+      <li><span id="days"></span>days</li>
+      <li><span id="hours"></span>Hours</li>
+      <li><span id="minutes"></span>Minutes</li>
+      <li><span id="seconds"></span>Seconds</li>
+    </ul>
+  </div>
+  <div id="content" class="emoji">
+    <span>🥳</span>
+    <span>🎉</span>
+    <span>🎂</span>
+  </div>
+</div>
+
+<!-- <h1>Light/Dark Toggle<br> Button</h1>
+
+<div>
+  <input type="checkbox" class="checkbox" id="checkbox">
+  <label for="checkbox" class="checkbox-label">
+    <i class="fas fa-moon"></i>
+    <i class="fas fa-sun"></i>
+    <span class="ball"></span>
+  </label>
+</div> -->
+<img src="./gifts.png" alt="" class="gifts">
+<img src="./comment.png" alt="" class="think">
+
+
+ <div class="typing"></div>
+<div id="container3D"></div>
+<script src="/main.js"></script>
+<script type="module" src="/app.js"></script>
+
+
+
+ 
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+
+  <script>
+    gsap.registerPlugin(TextPlugin);
+
+    const messages = [
+      "Hi Sweety ❤️",
+      "Can’t Wait to See Your Smile on Your Day 🌸"
+    ];
+      <!-- "Every Second Brings Me Closer to You 💕", -->
+
+    let tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+
+    messages.forEach(msg => {
+      // Type the text
+      tl.to(".typing", {
+        text: msg,
+        duration: 3,
+        ease: "none"
+      })
+      // Small pause after typing
+      .to(".typing", { duration: 1 })
+      // Erase effect
+      .to(".typing", {
+        text: "",
+        duration: 1,
+        ease: "none"
+      });
+    });
+
+    // Blinking cursor effect
+    gsap.to(".typing", {
+      borderRightColor: "transparent",
+      repeat: -1,
+      yoyo: true,
+      duration: 0.6
+    });
+  </script> 
+</body>
+</html>
