@@ -850,7 +850,7 @@ window.addEventListener('resize', () => {
   const reRender3D = () => {
       requestAnimationFrame(reRender3D);
       renderer.render(scene, camera);
-      if (mixer) mixer.update(0.017);
+      if (mixer) mixer.update(0.01);
       if (mixers) mixers.update(0.01);
       if (mixers1) mixers1.update(0.01);
       if (mixers2) mixers2.update(0.01);
