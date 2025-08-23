@@ -407,7 +407,7 @@ li span {
 <!-- <img src="./gifts.png" alt="" class="gifts"> -->
 <img src="./comment.png" alt="" class="think">
 
-<audio autoplay loop>
+<audio id="bg-music" autoplay loop>
   <source src="./bgm.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
@@ -461,6 +461,13 @@ li span {
     });
   </script> 
 
+  <script>
+  document.body.addEventListener("click", function () {
+    const music = document.getElementById("bg-music");
+    music.muted = false;
+    music.play();
+  }, { once: true });
+</script>
   <script>
     (function () {
   const second = 1000,
@@ -837,18 +844,7 @@ document.addEventListener("click", () => {
       modelMove();
   });
 
-  // ---- Butterfly ----
-  loader.load('./animated_butterfly.glb', function (gltf) {
-      butterfly = gltf.scene;
-      butterfly.scale.set(0.09, 0.09, 0.09);
-      butterfly.position.set(0.6, -1.4, 0);
-      butterfly.rotation.y = 10  ; 
-      scene.add(butterfly);
 
-      mixers1 = new THREE.AnimationMixer(butterfly);
-      mixers1.clipAction(gltf.animations[0]).play();
-      modelMove();
-  });
 
 
    // ---- Butterfly ----
