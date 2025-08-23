@@ -360,6 +360,7 @@ li span {
       color: black;
       position:fixed;
       bottom:252px;
+      font-weight: bold;
       right: 55px;
       overflow: hidden;
       z-index:99 !important;
@@ -765,26 +766,56 @@ window.addEventListener('resize', () => {
   // ================= SCENE =================
   const scene = new THREE.Scene();
   let bee, garden, butterfly;
-  let mixer, mixers, mixers1, mixers2;
+  let mixer, mixers, mixers1, mixers2,butterflyanimation;
 
   // ================= LOADERS =================
   const loader = new GLTFLoader();
 
   // ---- Dog ----
-  loader.load('./playful_dog.glb',
-      function (gltf) {
-          bee = gltf.scene;
-          bee.position.set(0.07, -1.7, 0);
-          scene.add(bee);
 
-          mixer = new THREE.AnimationMixer(bee);
-          mixer.clipAction(gltf.animations[2]).play();
-          modelMove();
-      }
-  );
+
+
+  let dogActions = {}, activeDogAction, currentDogAnim = 0;
+
+loader.load('./dogs.glb', function (gltf) {
+    bee = gltf.scene;
+    bee.position.set(0.07, -1.7, 0);
+    scene.add(bee);
+
+    mixer = new THREE.AnimationMixer(bee);
+
+    // Store all animations in dogActions
+    gltf.animations.forEach((clip, i) => {
+        dogActions[i] = mixer.clipAction(clip);
+    });
+
+    // Play first animation initially
+    activeDogAction = dogActions[0];
+    activeDogAction.play();
+
+    modelMove();
+});
+
+function playDogAnimation(index) {
+    if (!mixer || !dogActions[index]) return;
+
+    if (activeDogAction) {
+        activeDogAction.fadeOut(0.3); // Smoothly stop previous
+    }
+
+    activeDogAction = dogActions[index];
+    activeDogAction.reset().fadeIn(0.3).play();
+}
+
+document.addEventListener("click", () => {
+    currentDogAnim = (currentDogAnim + 1) % Object.keys(dogActions).length;
+    playDogAnimation(currentDogAnim);
+});
+
+
 
   // ---- Garden ----
-  loader.load('./garden_3d_fbx.glb', function (gltf) {
+  loader.load('./garden.glb', function (gltf) {
       garden = gltf.scene;
       garden.scale.set(0.09, 0.09, 0.09);
       garden.position.set(0.5, -1.8, 0);
@@ -807,12 +838,33 @@ window.addEventListener('resize', () => {
   loader.load('./animated_butterfly.glb', function (gltf) {
       butterfly = gltf.scene;
       butterfly.scale.set(0.09, 0.09, 0.09);
-      butterfly.position.set(0.5, -1.2, 0);
+      butterfly.position.set(0.6, -1.4, 0);
+      butterfly.rotation.y = 10  ; 
       scene.add(butterfly);
 
       mixers1 = new THREE.AnimationMixer(butterfly);
       mixers1.clipAction(gltf.animations[0]).play();
       modelMove();
+  });
+
+    // ---- Butterfly ----
+  loader.load('./butterfly.glb', function (gltf) {
+      butterfly = gltf.scene;
+      butterfly.scale.set(0.09, 0.09, 0.09);
+      butterfly.position.set(0.9, 0.3, 0);
+butterfly.rotation.y = 10  ;   // 90°
+
+// Rotate around X axis (up / down)
+butterfly.rotation.x = 20;   // 90°
+
+// Rotate around Z axis (tilt)
+butterfly.rotation.z = Math.PI / 4; 
+      scene.add(butterfly);
+      butterflyanimation = new THREE.AnimationMixer(butterfly);
+      butterflyanimation.clipAction(gltf.animations[0]).play();
+      modelMove();
+            // Rotate around Y axis (left / right)
+
   });
 
   // ---- Gift ----
@@ -854,6 +906,8 @@ window.addEventListener('resize', () => {
       if (mixers) mixers.update(0.01);
       if (mixers1) mixers1.update(0.01);
       if (mixers2) mixers2.update(0.01);
+      if (butterflyanimation) butterflyanimation.update(0.01);
+
   };
   reRender3D();
 
