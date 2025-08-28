@@ -260,6 +260,14 @@ header .content-fit nav ul{
 }
 
 
+#birthdayVideo {
+position: fixed;
+max-width: 100%;   /* responsive size */
+max-height: 80%;
+transform: translate(0%, 0%);     
+  /* optional background */
+}
+
 
 
 
@@ -391,11 +399,48 @@ li span {
       overflow: hidden;
       z-index:99 !important;
     }
+      video {
+      position: fixed;
+      top: 30%;
+      left: 0%;
+      max-width:300px;
+      object-fit: cover; /* Crop video to fit screen */
+      z-index: -1; /* Push behind content */
+    }
+.birthdaycontent{
+text-align: center;
+color: rgb(90, 90, 90);
+margin-top: 100px !important;
+font-weight: bold;
+width:80%;
+margin: auto;
+}
+    #birthdayVideo {
+position: fixed;
+max-width: 100%;   /* responsive size */
+max-height: 80%;
+transform: translate(0%, 0%) !important;     
+  /* optional background */
+}
     </style>
     
 </head>
 <body onclick="toggleText()">
-    <div >
+  
+  <div id="contenta" style="display: none; text-align: center;">
+    
+    <p class="birthdaycontent">😍The stars are jealous tonight✨, because the universe is celebrating someone far brighter than them💫.</p>
+    <p style="color: rgb(90, 90, 90); font-weight: bold; width:80%; margin: auto;margin-top:10px;">🥰Happy Birthday💫.</p>
+
+  <video id="birthdayVideo"   autoplay muted>
+    <source src="./gift.mp4" type="video/mp4">
+  </video>
+  <audio id="b-music" autoplay loop>
+  <source src="./ed.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+</div>
+    <div class="hideElement">
 <img src="./star.png" alt="" class="star"> 
   <img src="./star.png" alt="" class="star1"> 
   <img src="./star.png" alt="" class="star2"> 
@@ -434,10 +479,7 @@ li span {
 <!-- <img src="./gifts.png" alt="" class="gifts"> -->
 <img src="./comment.png" alt="" class="think">
 
-<audio id="bg-music" autoplay loop>
-  <source src="./bgm.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+
  <div class="popup-text" onclick="toggleText()">Bow-wow! Double Tap Me!💕</div>
 
  <div class="typing"></div>
@@ -451,6 +493,19 @@ li span {
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script>
+    // Video list
+    const videos = ["./wsih.mp4"];
+    let current = 0;
+
+    const videoPlayer = document.getElementById("birthdayVideo");
+
+    videoPlayer.addEventListener("ended", () => {
+      current = (current + 1) % videos.length; // loop through videos
+      videoPlayer.src = videos[current];       // change video source
+      videoPlayer.play();                      // play next video
+    });
+  </script>
 <script>
   function toggleText() {
   const popup = document.querySelector(".popup-text");
@@ -519,18 +574,13 @@ li span {
     popup.style.display = "block";
     comment.classList.add("no-animation"); 
   } 
-    const music = document.getElementById("bg-music");
-    music.muted = false;
-    music.play();
+    
   }, { once: true });
 </script>
 <script>
   window.addEventListener("load", () => {
-    const music = document.getElementById("bg-music");
-    let volume = 0;
-    music.muted = false; // unmute
-    music.volume = 0;    // start silent
-    music.play();
+    
+
 
     // Smooth fade-in
     const fade = setInterval(() => {
@@ -579,10 +629,22 @@ li span {
 
         //do something later when date is reached
         if (distance < 0) {
-          document.getElementById("headline").innerText = "It's my birthday!";
           document.getElementById("countdown").style.display = "none";
-          document.getElementById("content").style.display = "block";
+          document.getElementById("contenta").style.display = "block";
+          document.querySelector(".hideElement").style.display = "none";
+          document.querySelector("body").style.setProperty("background", "#f8f8f8", "important");
+          const music = document.getElementById("b-music");
+          music.muted = false;
+          music.play();
+
+          let video = document.getElementById("birthdayVideo");
+          video.play(); // autoplay video
           clearInterval(x);
+        }
+        else{
+          const music = document.getElementById("b-music");
+          music.muted = true;
+          music.volume = 0;
         }
         //seconds
       }, 0)
@@ -594,246 +656,6 @@ checkbox.addEventListener("change", () => {
   document.body.classList.toggle("dark")
 })
   </script>
-  <!-- <script>
-    import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
-import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
-import { gsap } from 'https://cdn.skypack.dev/gsap';
-
-// ================= CAMERA =================
-const camera = new THREE.PerspectiveCamera(
-    10,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
-camera.position.z = 20;
-
-
-// ================= SCENE =================
-const scene = new THREE.Scene();
-let bee, garden, butterfly,cloud;
-let mixer, mixers, mixers1,mixers2;
-
-// ================= LOADERS =================
-const loader = new GLTFLoader();
-
-// ---- Dog ----
-loader.load('/playful_dog.glb',
-    function (gltf) {
-        bee = gltf.scene;
-        bee.position.set(0.07, -1.7, 0);
-        scene.add(bee);
-
-        mixer = new THREE.AnimationMixer(bee);
-        mixer.clipAction(gltf.animations[2]).play();
-        modelMove();
-    }
-);
-
-// ---- Garden ----
-loader.load('/garden_3d_fbx.glb', function (gltf) {
-    garden = gltf.scene;
-    garden.scale.set(0.09, 0.09, 0.09);
-    garden.position.set(0.5, -1.8, 0);
-
-    garden.traverse((child) => {
-        if (child.isMesh) {
-            child.material.metalness = 0.3;
-            child.material.roughness = 0.4;
-        }
-    });
-
-    scene.add(garden);
-
-    mixers = new THREE.AnimationMixer(garden);
-    mixers.clipAction(gltf.animations[0]).play();
-    modelMove();
-});
-
-// ---- Butterfly ----
-loader.load('/animated_butterfly.glb', function (gltf) {
-    butterfly = gltf.scene;
-    butterfly.scale.set(0.09, 0.09, 0.09);
-    butterfly.position.set(0.5, -1.2, 0);
-    scene.add(butterfly);
-
-    mixers1 = new THREE.AnimationMixer(butterfly);
-    mixers1.clipAction(gltf.animations[0]).play();
-    modelMove();
-});
-
-// ---- Garden ----
-loader.load('/gift.glb', function (gltf) {
-    garden = gltf.scene;
-    garden.position.set(0.4, -1.7, 0);
-
-    garden.traverse((child) => {
-        if (child.isMesh) {
-            child.material.metalness = 0.3;
-            child.material.roughness = 0.4;
-        }
-    });
-
-    scene.add(garden);
-
-
-});
-
-// loader.load('/riverwood_tree.glb', function (gltf) {
-//     garden = gltf.scene;
-//     garden.scale.set(0.4,0.4, 1);
-
-//     garden.position.set(-1, -1.7, 0);
-
-//     garden.traverse((child) => {
-//         if (child.isMesh) {
-//             child.material.metalness = 0.3;
-//             child.material.roughness = 0.4;
-//         }
-//     });
-
-//     scene.add(garden);
-//        mixers2 = new THREE.AnimationMixer(garden);
-//     mixers2.clipAction(gltf.animations[0]).play();
-//     modelMove();
-
-
-// });
-
-
-
-
-// ================= RENDERER =================
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.getElementById('container3D').appendChild(renderer.domElement);
-
-// ================= LIGHTS =================
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-scene.add(ambientLight);
-
-const topLight = new THREE.DirectionalLight(0xffffff, 1);
-topLight.position.set(100, 100, 100);
-topLight.castShadow = true;
-scene.add(topLight);
-
-// ================= ANIMATION LOOP =================
-const reRender3D = () => {
-    requestAnimationFrame(reRender3D);
-    renderer.render(scene, camera);
-    if (mixer) mixer.update(0.02);
-    if (mixers) mixers.update(0.02);
-    if (mixers1) mixers1.update(0.02);
-    if (mixers2) mixers2.update(0.02);
-
-};
-reRender3D();
-
-// ================= CAMERA FOCUS HELPER =================
-function focusOnModel(model, offset = { x: 0, y: 2, z: 10 }, duration = 2) {
-    if (!model) return;
-
-    // Get model center
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-
-    gsap.to(camera.position, {
-        x: center.x + offset.x,
-        y: center.y + offset.y,
-        z: center.z + offset.z,
-        duration: duration,
-        ease: "power1.out",
-        onUpdate: () => {
-            camera.lookAt(center);
-        }
-    });
-}
-
-// ================= SECTIONS CONFIG =================
-let arrPositionModel = [
-    {
-        id: 'banner',
-        position: { x: 0, y: -1, z: 0 },
-        rotation: { x: 0, y: 1.5, z: 0 },
-        focus: "bee" // focus on dog
-    },
-    {
-        id: "intro",
-        position: { x: 1, y: -1, z: -5 },
-        rotation: { x: 0.5, y: -0.5, z: 0 },
-        focus: "garden" // focus on garden
-    },
-    {
-        id: "description",
-        position: { x: -1, y: -1, z: -5 },
-        rotation: { x: 0, y: 0.5, z: 0 },
-        focus: "butterfly" // focus on butterfly
-    },
-    {
-        id: "contact",
-        position: { x: 0.8, y: -1, z: 0 },
-        rotation: { x: 0.3, y: -0.5, z: 0 },
-        focus: "bee" // back to dog
-    },
-];
-
-// ================= MODEL MOVE ON SCROLL =================
-const modelMove = () => {
-    const sections = document.querySelectorAll('.section');
-    let currentSection;
-    sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= window.innerHeight / 3) {
-            currentSection = section.id;
-        }
-    });
-
-    let position_active = arrPositionModel.findIndex(
-        (val) => val.id == currentSection
-    );
-
-    if (position_active >= 0) {
-        let new_coordinates = arrPositionModel[position_active];
-
-        // Move the dog (bee) according to scroll
-        if (bee) {
-            gsap.to(bee.position, {
-                x: new_coordinates.position.x,
-                y: new_coordinates.position.y,
-                z: new_coordinates.position.z,
-                duration: 3,
-                ease: "power1.out"
-            });
-            gsap.to(bee.rotation, {
-                x: new_coordinates.rotation.x,
-                y: new_coordinates.rotation.y,
-                z: new_coordinates.rotation.z,
-                duration: 3,
-                ease: "power1.out"
-            });
-        }
-
-        // Focus camera on correct model
-        if (new_coordinates.focus === "bee") focusOnModel(bee);
-        if (new_coordinates.focus === "garden") focusOnModel(garden, { x: 0, y: 3, z: 15 });
-        if (new_coordinates.focus === "butterfly") focusOnModel(butterfly, { x: -1, y: 2, z: -10 });
-    }
-};
-
-// ================= EVENTS =================
-window.addEventListener('scroll', () => {
-    modelMove();
-});
-
-window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-});
-
-  </script> -->
 <script type="module">
   import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
   import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
