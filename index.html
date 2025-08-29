@@ -435,7 +435,7 @@ transform: translate(0%, 0%) !important;
   <video id="birthdayVideo"   autoplay muted>
     <source src="./gift.mp4" type="video/mp4">
   </video>
-  <audio id="b-music" autoplay loop>
+  <audio id="b-music" autoplay loop muted>
   <source src="./ed.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
@@ -579,18 +579,14 @@ transform: translate(0%, 0%) !important;
 </script>
 <script>
   window.addEventListener("load", () => {
-    
+             const music = document.getElementById("b-music");
+          music.muted = false;
+          music.play();
+
 
 
     // Smooth fade-in
-    const fade = setInterval(() => {
-      if (volume < 1) {
-        volume += 0.05;
-        music.volume = volume;
-      } else {
-        clearInterval(fade);
-      }
-    }, 200); // increase volume every 200ms
+ // increase volume every 200ms
   });
 </script>
   <script>
@@ -643,6 +639,7 @@ transform: translate(0%, 0%) !important;
         }
         else{
           const music = document.getElementById("b-music");
+          const volume = 0;
           music.muted = true;
           music.volume = 0;
         }
@@ -651,10 +648,7 @@ transform: translate(0%, 0%) !important;
   }());
 
 
-  const checkbox = document.getElementById("checkbox")
-checkbox.addEventListener("change", () => {
-  document.body.classList.toggle("dark")
-})
+  
   </script>
 <script type="module">
   import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
